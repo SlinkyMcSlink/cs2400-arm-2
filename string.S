@@ -1,14 +1,14 @@
 		;		ARM Programming Assignment #2: Writing C-strings
 		;
 		;		Write a program that assembles the values in chars*
-		;       into a C-style string. A C-style string is an array
-		;       of byte-size characters, terminated by a NULL (0x0).
-		;       Write the C-string to the FILL memory at 'string'.
-		;       Note: It's up to you to declare the correct number
-		;       of bytes to hold the result.
-
+		;		into a C-style string. A C-style string is an array
+		;		of byte-size characters, terminated by a NULL (0x0).
+		;		Write the C-string to the FILL memory at 'string'.
+		;		Note: It's up to you to declare the correct number
+		;		of bytes to hold the result.
+		
 		;		Your code here
-
+		
 chars0	DCD		'T', 'h', 'e', ' ', '2', '0', '1', '8', ' ', 'T', 'u'
 chars1	DCD		'r', 'i', 'n', 'g', ' ', 'A', 'w', 'a', 'r', 'd', ' '
 chars2	DCD		'w', 'a', 's', ' ', 'a', 'w', 'a', 'r', 'd', 'e', 'd'
@@ -19,4 +19,19 @@ chars6	DCD		'r', ' ', 't', 'h', 'e', 'i', 'r', ' ', 'w', 'o', 'r'
 chars7	DCD		'k', ' ', 'o', 'n', ' ', 'n', 'e', 'u', 'r', 'a', 'l'
 chars8	DCD		'n', 'e', 't', 'w', 'o', 'r', 'k', 's', '.'
 count	DCD		95
-;string	FILL	?
+string	FILL		100
+		
+		ADR		R0, chars0
+		ADR		R12, string
+		ADR		R2, count
+		LDR		R2, [R2]
+loop
+		LDR		R3, [R0]
+		STR		R3, [R12]
+		STR		R3, [R0], #4
+		SUBS		R2, R2, #1
+		BNE		loop
+		MOV		R3, #0
+		STR		R3, [R12]
+		END
+		
