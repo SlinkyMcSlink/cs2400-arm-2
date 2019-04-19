@@ -21,17 +21,35 @@ chars8	DCD		'n', 'e', 't', 'w', 'o', 'r', 'k', 's', '.'
 count	DCD		95
 string	FILL		100
 		
-		ADR		R0, chars0
-		ADR		R12, string
-		ADR		R2, count
-		LDR		R2, [R2]
-loop
-		LDR		R3, [R0]
-		STR		R3, [R12]
-		STR		R3, [R0], #4
-		SUBS		R2, R2, #1
-		BNE		loop
-		MOV		R3, #0
-		STR		R3, [R12]
-		END
+		ADR		R0, chars0                 ;Address of first char
+		ADR		R1, string                 ;Address in memory to write to.
+		MOV		R2, #0                     ;Offset
+		MOV		R3, #4                     ;Bit counter
+		MOV		R4, #0                     ;Temp reg
+		MOV		R5, #0
+		MOV		R6, #0
+		MOV		R7, #95
 		
+LOOP
+		LDR		R4, [R0, R2]!              ;Load in letter
+		SUB		R7, R7, #1
+		ADD		R5, R5, R4
+		LSL		R5, R5, #8
+		SUB		R3, R3, #1
+		CMP		R7, #0
+		BEQ		ENDIT
+		CMP		R3, #0
+		BEQ		NEXTREG
+		MOV		R2, #4
+		B		LOOP
+		
+NEXTREG
+		STR		R5, [R1, R6]!
+		ADD		R1, R1, #4
+		MOV		R5, #0
+		MOV		R3, #4
+		B		LOOP
+		
+		
+ENDIT
+		END
